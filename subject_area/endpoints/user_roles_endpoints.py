@@ -1,7 +1,7 @@
-from flask_restx import Api, Resource, fields
+from flask_restx import Api, Resource, fields, Namespace
 
 from flask import Blueprint
-from data.database_connect import app
+
 from subject_area.users_roles.user_account import update_user_account, get_user_account, \
     delete_user_account, create_user_account
 from subject_area.users_roles.employee import update_employee, create_employee, get_employee, delete_employee
@@ -10,19 +10,19 @@ from subject_area.users_roles.role import update_role, create_role, get_role, de
 from subject_area.users_roles.team_member import update_team_member, create_team_member, delete_team_member
 
 blueprint = Blueprint('api', __name__)
-api = Api(app, version='1', title='API', description='End-Points')
+
 
 # end points for user_roles <> user_account
-ns = api.namespace("user_account", description="user")
+user_account_ns = Namespace("user_account", description="user")
 
 
-@ns.route("/")
+@user_account_ns.route("/")
 class getUserAccount(Resource):
     def get(self):
         Username = None
         return get_user_account(Username)
 
-    POST_DOC_MODEL = ns.model('add_user_account', {
+    POST_DOC_MODEL = user_account_ns.model('add_user_account', {
         'username': fields.String(example="test",
                                   description='username of the user'),
         'password': fields.String(example="test2",
@@ -41,12 +41,12 @@ class getUserAccount(Resource):
 
     })
 
-    @ns.expect(POST_DOC_MODEL)
+    @user_account_ns.expect(POST_DOC_MODEL)
     def post(self):
         return create_user_account()
 
 
-@ns.route("/<string:Username>")
+@user_account_ns.route("/<string:Username>")
 class getUserAccount_id(Resource):
     def get(self, Username):
         return get_user_account(Username)
@@ -54,7 +54,7 @@ class getUserAccount_id(Resource):
     def delete(self, Username):
         return delete_user_account(Username)
 
-    PUT_DOC_MODEL = ns.model('update_user_account', {
+    PUT_DOC_MODEL = user_account_ns.model('update_user_account', {
         'username': fields.String(example="test",
                                   description='username of the user'),
         'password': fields.String(example="test2",
@@ -73,34 +73,34 @@ class getUserAccount_id(Resource):
 
     })
 
-    @ns.expect(PUT_DOC_MODEL)
-    @ns.doc(params={"Username": "enter username"})
+    @user_account_ns.expect(PUT_DOC_MODEL)
+    @user_account_ns.doc(params={"Username": "enter username"})
     def put(self, Username):
 
         return update_user_account(Username)
 
 
 # end points for user_roles <> employees
-ns = api.namespace("employee", description="employee data")
+employee_ns = Namespace("employee", description="employee data")
 
 
-@ns.route("/")
+@employee_ns.route("/")
 class getEmployee(Resource):
     def get(self):
         employee_code = None
         return get_employee(employee_code)
 
-    POST_DOC_MODEL = ns.model('add_employee', {
+    POST_DOC_MODEL = employee_ns.model('add_employee', {
         'employee_code': fields.String(example="code01", description='code of the employee'),
         'employee_name': fields.String(example="name", description='name of the employee')
     })
 
-    @ns.expect(POST_DOC_MODEL)
+    @employee_ns.expect(POST_DOC_MODEL)
     def post(self):
         return create_employee()
 
 
-@ns.route("/<string:emp_code>")
+@employee_ns.route("/<string:emp_code>")
 class getEmployee_id(Resource):
     def get(self, emp_code):
         return get_employee(emp_code)
@@ -108,39 +108,39 @@ class getEmployee_id(Resource):
     def delete(self, emp_code):
         return delete_employee(emp_code)
 
-    PUT_DOC_MODEL = ns.model('update_employee', {
+    PUT_DOC_MODEL = employee_ns.model('update_employee', {
         'employee_code': fields.String(example="code01", description='code of the employee'),
         'employee_name': fields.String(example="name", description='name of the employee'),
         'user_account_id': fields.Integer(example="0", description='user account id from user_account table')
 
     })
 
-    @ns.expect(PUT_DOC_MODEL)
-    @ns.doc(params={"emp_code": "enter employee_code"})
+    @employee_ns.expect(PUT_DOC_MODEL)
+    @employee_ns.doc(params={"emp_code": "enter employee_code"})
     def put(self, emp_code):
         return update_employee(emp_code)
 
 
 # end points for user_roles <> team
-ns = api.namespace("team", description="team name & id")
+team_ns = Namespace("team", description="team name & id")
 
 
-@ns.route("/")
+@team_ns.route("/")
 class getTeam(Resource):
     def get(self):
         team_id = None
         return get_team(team_id)
 
-    POST_DOC_MODEL = ns.model('add_team', {
+    POST_DOC_MODEL = team_ns.model('add_team', {
         'team_name': fields.String(example="name", description='name of the team')
     })
 
-    @ns.expect(POST_DOC_MODEL)
+    @team_ns.expect(POST_DOC_MODEL)
     def post(self):
         return create_team()
 
 
-@ns.route("/<string:team_id>")
+@team_ns.route("/<string:team_id>")
 class getTeam_id(Resource):
     def get(self, team_id):
         return get_team(team_id)
@@ -148,38 +148,38 @@ class getTeam_id(Resource):
     def delete(self, team_id):
         return delete_team(team_id)
 
-    PUT_DOC_MODEL = ns.model('update_team', {
+    PUT_DOC_MODEL = team_ns.model('update_team', {
 
         'team_name': fields.String(example="name", description='name of the team')
     })
 
-    @ns.expect(PUT_DOC_MODEL)
-    @ns.doc(params={"team_id": "enter team id"})
+    @team_ns.expect(PUT_DOC_MODEL)
+    @team_ns.doc(params={"team_id": "enter team id"})
     def put(self, team_id):
         return update_team(team_id)
 
 # end points for user_roles <> role
 
 
-ns = api.namespace("role", description="role name & id")
+role_ns = Namespace("role", description="role name & id")
 
 
-@ns.route("/")
+@role_ns.route("/")
 class getRole(Resource):
     def get(self):
         role_id = None
         return get_role(role_id)
 
-    POST_DOC_MODEL = ns.model('add_role', {
+    POST_DOC_MODEL = role_ns.model('add_role', {
         'role_name': fields.String(example="name", description='role name')
     })
 
-    @ns.expect(POST_DOC_MODEL)
+    @role_ns.expect(POST_DOC_MODEL)
     def post(self):
         return create_role()
 
 
-@ns.route("/<string:role_id>")
+@role_ns.route("/<string:role_id>")
 class getRole_id(Resource):
     def get(self, role_id):
         return get_role(role_id)
@@ -187,24 +187,24 @@ class getRole_id(Resource):
     def delete(self, role_id):
         return delete_role(role_id)
 
-    PUT_DOC_MODEL = ns.model('update_role', {
+    PUT_DOC_MODEL = role_ns.model('update_role', {
 
         'role_name': fields.String(example="name", description='role name')
     })
 
-    @ns.expect(PUT_DOC_MODEL)
-    @ns.doc(params={"role_id": "enter role id"})
+    @role_ns.expect(PUT_DOC_MODEL)
+    @role_ns.doc(params={"role_id": "enter role id"})
     def put(self, role_id):
         return update_role(role_id)
 
 
 # end points for user_roles <> team_member
-ns = api.namespace("team_member", description="team_member")
+team_member_ns = Namespace("team_member", description="team_member")
 
 
-@ns.route("/")
+@team_member_ns.route("/")
 class getTeam_member(Resource):
-    POST_DOC_MODEL = ns.model('add_team_member', {
+    POST_DOC_MODEL = team_member_ns.model('add_team_member', {
         'team_id': fields.Integer(example=1, description='id of the team'),
         'role_id': fields.Integer(example=1, description='id of the role'),
         'employee_id': fields.Integer(example=1, description='id of the employee'),
@@ -212,17 +212,17 @@ class getTeam_member(Resource):
 
     })
 
-    @ns.expect(POST_DOC_MODEL)
+    @team_member_ns.expect(POST_DOC_MODEL)
     def post(self):
         return create_team_member()
 
 
-@ns.route("/<int:team_member_id>")
+@team_member_ns.route("/<int:team_member_id>")
 class getTeam_member_id(Resource):
     def delete(self, team_member_id):
         return delete_team_member(team_member_id)
 
-    PUT_DOC_MODEL = ns.model('update_team_member', {
+    PUT_DOC_MODEL = team_member_ns.model('update_team_member', {
          'team_id': fields.Integer(example=1, description='id of the team'),
         'role_id': fields.Integer(example=1, description='id of the role'),
         'employee_id': fields.Integer(example=1, description='id of the employee'),
@@ -230,11 +230,10 @@ class getTeam_member_id(Resource):
 
     })
 
-    @ns.expect(PUT_DOC_MODEL)
-    @ns.doc(params={"team_member_id": "enter team-member_id"})
+    @team_member_ns.expect(PUT_DOC_MODEL)
+    @team_member_ns.doc(params={"team_member_id": "enter team-member_id"})
     def put(self, team_member_id):
         return update_team_member(team_member_id)
 
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True, port=5555)
+

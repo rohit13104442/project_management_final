@@ -72,6 +72,7 @@ class user_account(db.Model):
     registration_date = db.Column(db.Date, default=date.today())
     is_active = db.Column(db.Boolean(255))
 
+
     def __init__(self, username, password, email, first_name, last_name, is_project_manager, registration_date, is_active):
         self.username = username
         self.password = password
