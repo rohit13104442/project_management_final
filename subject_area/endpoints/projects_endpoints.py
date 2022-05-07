@@ -1,10 +1,8 @@
-from flask_restx import Api, Resource, fields, Namespace
-from flask import Blueprint
+from flask_restx import  Resource, fields, Namespace
 from subject_area.projects.project import get_project, delete_project, update_project, create_project
 from subject_area.projects.project_manager import delete_project_manager, update_project_manager, create_project_manager
 from subject_area.projects.client_partner import get_client_partner, create_client_partner, delete_client_partner, update_client_partner
 from subject_area.projects.on_project import get_on_project,create_on_project,delete_on_project,update_on_project
-blueprint = Blueprint('api', __name__)
 
 # end points for projects <> project
 project_ns = Namespace("project", description="project details")
@@ -23,7 +21,7 @@ class getProject(Resource):
                                           description='planned start date'),
         'planned_end_date': fields.Date(example="2022-12-30",
                                           description='planned end date'),
-        'project_description': fields.Date(example="description about the project",
+        'project_description': fields.String(example="description about the project",
                                           description='')})
 
     @project_ns.expect(POST_DOC_MODEL)
