@@ -3,6 +3,10 @@ from flask import request
 from subject_area.projects.project import project
 
 
+
+
+
+
 def get_task(task_id):
     if task_id is None:
         all_data = task.query.all()
@@ -16,6 +20,7 @@ def get_task(task_id):
         return task_schema.jsonify(all_data)
 
 
+
 def create_task():
     task_details = request.json.get
     task_name = task_details("task_name")
@@ -25,6 +30,10 @@ def create_task():
     planned_start_date = task_details("planned_start_date")
     planned_end_date = task_details("planned_end_date")
     planned_budget = task_details("planned_budget")
+
+
+
+
 
     if task_name is None:
         return "task_name is not defined"
@@ -40,17 +49,37 @@ def create_task():
         return "planned end date is not defined"
     if planned_budget is None:
         return "planned budget is not defined"
+    if status_id is None:
+        return "status id is not defined"
+
 
     query1 = project.query.all()
-    if [id for id in query1 if id.project_id == project_id]:
+
+
+    def fun(query1):
+        x = True
+        while x == True:
+            if [id for id in query1 if id.project_id == project_id]:
+                x = True
+            else:
+                return "error1"
+
+            break
+        return True
+    if fun(query1) is True:
         my_update = task(task_name, project_id, priority, description, planned_start_date, planned_end_date,
                          planned_budget)
         db.session.add(my_update)
         db.session.commit()
         return {"message": "success"}
 
-    else:
+    elif fun(query1) == "error1":
         return "project id doesn't exist"
+
+
+    else:
+        return ("error")
+
 
 def delete_task(task_id):
     all_data = task.query.filter_by(task_id=task_id).first()
@@ -78,6 +107,7 @@ def update_task(task_id):
     actual_start_date = task_details("actual_start_date")
     actual_end_date = task_details("actual_end_date")
     actual_budget = task_details("actual_budget")
+
     result = task_schema.dump(data)
     if task_name is None:
         task_name = result["task_name"]
@@ -100,8 +130,23 @@ def update_task(task_id):
     if actual_budget is None:
         actual_budget = result["actual_budget"]
 
+
+
     query1 = project.query.all()
-    if [id for id in query1 if id.project_id == project_id]:
+
+
+    def fun(query1):
+        x = True
+        while x == True:
+            if [id for id in query1 if id.project_id == project_id]:
+                x = True
+            else:
+                return "error1"
+
+            break
+        return True
+
+    if fun(query1) is True:
         data.task_name = task_name
         data.project_id = project_id
         data.priority = priority
@@ -113,11 +158,15 @@ def update_task(task_id):
         data.actual_end_date = actual_end_date
         data.actual_budget = actual_budget
 
+
         db.session.commit()
         return {"message": "success"}
 
-    else:
+    elif fun(query1) == "error1":
         return "project id doesn't exist"
+
+    else:
+        return ("error")
 
 
 
@@ -142,6 +191,7 @@ class task(db.Model):
     actual_start_date = db.Column()
     actual_end_date = db.Column()
     actual_budget = db.Column(db.NUMERIC)
+    status_id = db.Column(db.Integer)
 
     def __init__(self, task_name, project_id, priority, description, planned_start_date, planned_end_date, planned_budget):
         self.task_name = task_name

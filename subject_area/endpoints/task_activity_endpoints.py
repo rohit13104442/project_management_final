@@ -1,7 +1,7 @@
 from flask_restx import Resource, fields, Namespace
 from subject_area.task_activity.task import get_task, create_task, delete_task, update_task
 from subject_area.task_activity.activity import get_activity, create_activity, delete_activity, update_activity
-from subject_area.task_activity.assigned import create_assigned, delete_assigned, update_assigned
+from subject_area.task_activity.assigned import create_assigned, delete_assigned, update_assigned, create_assign_team
 
 # end points for task_activity<> task
 task_ns = Namespace("task", description="task details")
@@ -27,7 +27,8 @@ class gettask(Resource):
         'planned_end_date': fields.Date(example="2022-12-30",
                                         description='planned end date'),
         'planned_budget': fields.Integer(example="1000",
-                                         description='budget in INR')})
+                                         description='budget in INR')
+    })
 
     @task_ns.expect(POST_DOC_MODEL)
     def post(self):
@@ -62,7 +63,8 @@ class gettask_id(Resource):
         'actual_end_date': fields.Date(example="2022-12-30",
                                        description='actual end date'),
         'actual_budget': fields.Integer(example=1000,
-                                        description='budget in INR'),
+                                        description='budget in INR')
+
 
     })
 
@@ -96,7 +98,16 @@ class getactivity(Resource):
         'planned_end_date': fields.Date(example="2022-12-30",
                                         description='planned end date'),
         'planned_budget': fields.Integer(example="1000",
-                                         description='budget in INR')})
+                                         description='budget in INR'),
+        'uom': fields.String(example="kg",
+                                         description='unit of measurement'),
+        'goal': fields.Integer(example="25",
+                                  description='what is our goal in terms of uom'),
+        'status_id': fields.Integer(example="1",
+                               description='status id from status table')
+
+
+    })
 
     @activity_ns.expect(POST_DOC_MODEL)
     def post(self):
@@ -132,6 +143,12 @@ class getactivity_id(Resource):
                                        description='actual end date'),
         'actual_budget': fields.Integer(example=1000,
                                         description='budget in INR'),
+        'uom': fields.String(example="kg",
+                             description='unit of measurement'),
+        'goal': fields.Integer(example="25",
+                               description='what is our goal in terms of uom'),
+        'status_id': fields.Integer(example="1",
+                                    description='status id from status table')
 
     })
 
@@ -176,3 +193,13 @@ class getassigned_id(Resource):
     @assigned_ns.doc(params={"assigned_id": "enter assigned_id"})
     def put(self, assigned_id):
         return update_assigned(assigned_id)
+
+@assigned_ns.route("/team")
+class fetchteam(Resource):
+    POST_DOC_MODEL = assigned_ns.model('add_team',{
+        'team_id':fields.Integer(example=1, description="id od the team to add employee in activity"),
+        'activity_id':fields.Integer(example=1, description="activity id to add team")
+    })
+    @assigned_ns.expect(POST_DOC_MODEL)
+    def post(self):
+       return create_assign_team()

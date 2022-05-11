@@ -43,6 +43,8 @@ def create_user_account():
     for id in all_data:
         if username == id.username:
             return "username  already registered"
+        elif email == id.email:
+            return "email already registered"
     my_update = user_account(username, password, email, first_name, last_name, is_project_manager,
                              registration_date, is_active)
 
@@ -111,6 +113,8 @@ def update_user_account(Username):
     for id in all_data:
         if username == id.username and username != Username:
             return "username  is already registered"
+        elif email == id.email:
+            return "email already registered"
 
     if username is None:
         username = result["username"]

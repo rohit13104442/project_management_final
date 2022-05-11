@@ -3,7 +3,7 @@ from subject_area.projects.project import get_project, delete_project, update_pr
 from subject_area.projects.project_manager import delete_project_manager, update_project_manager, create_project_manager
 from subject_area.projects.client_partner import get_client_partner, create_client_partner, delete_client_partner, update_client_partner
 from subject_area.projects.on_project import get_on_project,create_on_project,delete_on_project,update_on_project
-
+from subject_area.projects.status import get_status, update_status, delete_status, create_status
 # end points for projects <> project
 project_ns = Namespace("project", description="project details")
 
@@ -214,3 +214,41 @@ class getOn_project_id(Resource):
     @on_project_ns.doc(params={"on_project_id": "enter on_project id"})
     def put(self, on_project_id):
         return update_on_project(on_project_id)
+
+
+# end points for projects <> status
+status_ns = Namespace("status", description="status details")
+
+
+@status_ns.route("/")
+class getStatus(Resource):
+    def get(self):
+        status_id = None
+        return get_status(status_id)
+
+    POST_DOC_MODEL = status_ns.model('add_status', {
+        'status_name': fields.String(example="completed", description=''),
+        'project_id': fields.Integer(example="0", description='project id from project table')})
+
+    @status_ns.expect(POST_DOC_MODEL)
+    def post(self):
+        return create_status()
+
+
+@status_ns.route("/<int:status_id>")
+class getStatus_id(Resource):
+    def get(self, status_id):
+        return get_status(status_id)
+
+    def delete(self, status_id):
+        return delete_status(status_id)
+
+    PUT_DOC_MODEL = status_ns.model('update_status', {
+        'status_name': fields.String(example="completed", description=''),
+        'project_id': fields.Integer(example="0", description='project id from project table')})
+
+
+    @status_ns.expect(PUT_DOC_MODEL)
+    @status_ns.doc(params={"status_id": "enter status id"})
+    def put(self, status_id):
+        return update_status(status_id)
