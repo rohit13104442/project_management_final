@@ -18,6 +18,7 @@ user_account_ns = Namespace("user_account", description="user")
 
 @user_account_ns.route("/")
 class getUserAccount(Resource):
+    @user_account_ns.doc(security='apikey')
     def get(self):
         Username = None
         return get_user_account(Username)
@@ -42,15 +43,17 @@ class getUserAccount(Resource):
     })
 
     @user_account_ns.expect(POST_DOC_MODEL)
+    @user_account_ns.doc(security='apikey')
     def post(self):
         return create_user_account()
 
 
 @user_account_ns.route("/<string:Username>")
 class getUserAccount_id(Resource):
+    @user_account_ns.doc(security='apikey')
     def get(self, Username):
         return get_user_account(Username)
-
+    @user_account_ns.doc(security='apikey')
     def delete(self, Username):
         return delete_user_account(Username)
 
@@ -74,7 +77,7 @@ class getUserAccount_id(Resource):
     })
 
     @user_account_ns.expect(PUT_DOC_MODEL)
-    @user_account_ns.doc(params={"Username": "enter username"})
+    @user_account_ns.doc(security='apikey',params={"Username": "enter username"})
     def put(self, Username):
 
         return update_user_account(Username)
@@ -86,6 +89,7 @@ employee_ns = Namespace("employee", description="employee data")
 
 @employee_ns.route("/")
 class getEmployee(Resource):
+    @employee_ns.doc(security='apikey')
     def get(self):
         employee_code = None
         return get_employee(employee_code)
@@ -94,7 +98,7 @@ class getEmployee(Resource):
         'employee_code': fields.String(example="code01", description='code of the employee'),
         'employee_name': fields.String(example="name", description='name of the employee')
     })
-
+    @employee_ns.doc(security='apikey')
     @employee_ns.expect(POST_DOC_MODEL)
     def post(self):
         return create_employee()
@@ -102,9 +106,10 @@ class getEmployee(Resource):
 
 @employee_ns.route("/<string:emp_code>")
 class getEmployee_id(Resource):
+    @employee_ns.doc(security='apikey')
     def get(self, emp_code):
         return get_employee(emp_code)
-
+    @employee_ns.doc(security='apikey')
     def delete(self, emp_code):
         return delete_employee(emp_code)
 
@@ -116,7 +121,7 @@ class getEmployee_id(Resource):
     })
 
     @employee_ns.expect(PUT_DOC_MODEL)
-    @employee_ns.doc(params={"emp_code": "enter employee_code"})
+    @employee_ns.doc(security='apikey',params={"emp_code": "enter employee_code"})
     def put(self, emp_code):
         return update_employee(emp_code)
 
@@ -127,6 +132,7 @@ team_ns = Namespace("team", description="team name & id")
 
 @team_ns.route("/")
 class getTeam(Resource):
+    @team_ns.doc(security='apikey')
     def get(self):
         team_id = None
         return get_team(team_id)
@@ -134,7 +140,7 @@ class getTeam(Resource):
     POST_DOC_MODEL = team_ns.model('add_team', {
         'team_name': fields.String(example="name", description='name of the team')
     })
-
+    @team_ns.doc(security='apikey')
     @team_ns.expect(POST_DOC_MODEL)
     def post(self):
         return create_team()
@@ -142,9 +148,10 @@ class getTeam(Resource):
 
 @team_ns.route("/<string:team_id>")
 class getTeam_id(Resource):
+    @team_ns.doc(security='apikey')
     def get(self, team_id):
         return get_team(team_id)
-
+    @team_ns.doc(security='apikey')
     def delete(self, team_id):
         return delete_team(team_id)
 
@@ -154,7 +161,7 @@ class getTeam_id(Resource):
     })
 
     @team_ns.expect(PUT_DOC_MODEL)
-    @team_ns.doc(params={"team_id": "enter team id"})
+    @team_ns.doc(security='apikey',params={"team_id": "enter team id"})
     def put(self, team_id):
         return update_team(team_id)
 
@@ -166,6 +173,7 @@ role_ns = Namespace("role", description="role name & id")
 
 @role_ns.route("/")
 class getRole(Resource):
+    @role_ns.doc(security='apikey')
     def get(self):
         role_id = None
         return get_role(role_id)
@@ -175,15 +183,17 @@ class getRole(Resource):
     })
 
     @role_ns.expect(POST_DOC_MODEL)
+    @role_ns.doc(security='apikey')
     def post(self):
         return create_role()
 
 
 @role_ns.route("/<string:role_id>")
 class getRole_id(Resource):
+    @role_ns.doc(security='apikey')
     def get(self, role_id):
         return get_role(role_id)
-
+    @role_ns.doc(security='apikey')
     def delete(self, role_id):
         return delete_role(role_id)
 
@@ -193,7 +203,7 @@ class getRole_id(Resource):
     })
 
     @role_ns.expect(PUT_DOC_MODEL)
-    @role_ns.doc(params={"role_id": "enter role id"})
+    @role_ns.doc(security='apikey',params={"role_id": "enter role id"})
     def put(self, role_id):
         return update_role(role_id)
 
@@ -213,12 +223,14 @@ class getTeam_member(Resource):
     })
 
     @team_member_ns.expect(POST_DOC_MODEL)
+    @team_member_ns.doc(security='apikey')
     def post(self):
         return create_team_member()
 
 
 @team_member_ns.route("/<int:team_member_id>")
 class getTeam_member_id(Resource):
+    @team_member_ns.doc(security='apikey')
     def delete(self, team_member_id):
         return delete_team_member(team_member_id)
 
@@ -231,7 +243,7 @@ class getTeam_member_id(Resource):
     })
 
     @team_member_ns.expect(PUT_DOC_MODEL)
-    @team_member_ns.doc(params={"team_member_id": "enter team-member_id"})
+    @team_member_ns.doc(security='apikey',params={"team_member_id": "enter team-member_id"})
     def put(self, team_member_id):
         return update_team_member(team_member_id)
 

@@ -180,6 +180,7 @@ progress_table_ns = Namespace("progress_table", description="progress_table deta
 
 @progress_table_ns.route("/")
 class getProgress_table(Resource):
+    @progress_table_ns.doc(security='apikey')
     def get(self):
         progress_table_id = None
         return get_progress_table(progress_table_id)
@@ -198,15 +199,17 @@ class getProgress_table(Resource):
     })
 
     @progress_table_ns.expect(POST_DOC_MODEL)
+    @progress_table_ns.doc(security='apikey')
     def post(self):
         return create_progress_table()
 
 
 @progress_table_ns.route("/<int:progress_table_id>")
 class getProject_id(Resource):
+    @progress_table_ns.doc(security='apikey')
     def get(self, progress_table_id):
         return get_progress_table(progress_table_id)
-
+    @progress_table_ns.doc(security='apikey')
     def delete(self, progress_table_id):
         return delete_progress_table(progress_table_id)
 
@@ -224,7 +227,7 @@ class getProject_id(Resource):
     })
 
     @progress_table_ns.expect(PUT_DOC_MODEL)
-    @progress_table_ns.doc(params={"progress_table_id": "enter progress table id"})
+    @progress_table_ns.doc(security='apikey',params={"progress_table_id": "enter progress table id"})
     def put(self, progress_table_id):
         return update_progress_table(progress_table_id)
 

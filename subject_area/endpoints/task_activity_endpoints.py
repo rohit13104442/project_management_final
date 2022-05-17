@@ -9,6 +9,7 @@ task_ns = Namespace("task", description="task details")
 
 @task_ns.route("/")
 class gettask(Resource):
+    @task_ns.doc(security='apikey')
     def get(self):
         task_id = None
         return get_task(task_id)
@@ -29,7 +30,7 @@ class gettask(Resource):
         'planned_budget': fields.Integer(example="1000",
                                          description='budget in INR')
     })
-
+    @task_ns.doc(security='apikey')
     @task_ns.expect(POST_DOC_MODEL)
     def post(self):
         return create_task()
@@ -37,9 +38,10 @@ class gettask(Resource):
 
 @task_ns.route("/<int:task_id>")
 class gettask_id(Resource):
+    @task_ns.doc(security='apikey')
     def get(self, task_id):
         return get_task(task_id)
-
+    @task_ns.doc(security='apikey')
     def delete(self, task_id):
         return delete_task(task_id)
 
@@ -69,7 +71,7 @@ class gettask_id(Resource):
     })
 
     @task_ns.expect(PUT_DOC_MODEL)
-    @task_ns.doc(params={"task_id": "enter task id"})
+    @task_ns.doc(security='apikey', params={"task_id": "enter task id"})
     def put(self, task_id):
         return update_task(task_id)
 
@@ -80,6 +82,7 @@ activity_ns = Namespace("activity", description="activity details")
 
 @activity_ns.route("/")
 class getactivity(Resource):
+    @activity_ns.doc(security='apikey')
     def get(self):
         activity_id = None
         return get_activity(activity_id)
@@ -110,15 +113,18 @@ class getactivity(Resource):
     })
 
     @activity_ns.expect(POST_DOC_MODEL)
+    @activity_ns.doc(security='apikey')
     def post(self):
         return create_activity()
 
 
 @activity_ns.route("/<int:activity_id>")
 class getactivity_id(Resource):
+    @activity_ns.doc(security='apikey')
     def get(self, activity_id):
         return get_activity(activity_id)
 
+    @activity_ns.doc(security='apikey')
     def delete(self, activity_id):
         return delete_activity(activity_id)
 
@@ -153,7 +159,7 @@ class getactivity_id(Resource):
     })
 
     @activity_ns.expect(PUT_DOC_MODEL)
-    @activity_ns.doc(params={"activity_id": "enter activityid"})
+    @activity_ns.doc(security='apikey',params={"activity_id": "enter activityid"})
     def put(self, activity_id):
         return update_activity(activity_id)
 
@@ -172,12 +178,14 @@ class getassigned(Resource):
     })
 
     @assigned_ns.expect(POST_DOC_MODEL)
+    @assigned_ns.doc(security='apikey')
     def post(self):
         return create_assigned()
 
 
 @assigned_ns.route("/<int:assigned_id>")
 class getassigned_id(Resource):
+    @assigned_ns.doc(security='apikey')
     def delete(self, assigned_id):
         return delete_assigned(assigned_id)
 
@@ -190,7 +198,7 @@ class getassigned_id(Resource):
     })
 
     @activity_ns.expect(PUT_DOC_MODEL)
-    @assigned_ns.doc(params={"assigned_id": "enter assigned_id"})
+    @assigned_ns.doc(security='apikey', params={"assigned_id": "enter assigned_id"})
     def put(self, assigned_id):
         return update_assigned(assigned_id)
 
@@ -201,5 +209,6 @@ class fetchteam(Resource):
         'activity_id':fields.Integer(example=1, description="activity id to add team")
     })
     @assigned_ns.expect(POST_DOC_MODEL)
+    @assigned_ns.doc(security='apikey')
     def post(self):
        return create_assign_team()
