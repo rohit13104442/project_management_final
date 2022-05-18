@@ -5,7 +5,7 @@ from subject_area.projects.client_partner import get_client_partner, create_clie
 from subject_area.projects.on_project import get_on_project,create_on_project,delete_on_project,update_on_project
 from subject_area.projects.status import get_status, update_status, delete_status, create_status
 from .validators import token_check
-from flask import request
+
 
 # end points for projects <> project
 project_ns = Namespace("project", description="project details")
