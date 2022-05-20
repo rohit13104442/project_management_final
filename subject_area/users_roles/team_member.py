@@ -48,11 +48,11 @@ def create_team_member():
         db.session.add(my_update)
         db.session.commit()
         return {"message": "success"}
-    elif fun(query1, query2, query3) is "error1":
+    elif fun(query1, query2, query3) == "error1":
         return "team id doesn't exist"
-    elif fun(query1, query2, query3) is "error2":
+    elif fun(query1, query2, query3) == "error2":
         return "role id doesn't exist"
-    elif fun(query1, query2, query3) is "error3":
+    elif fun(query1, query2, query3) == "error3":
         return "employee id doesn't exist"
     else : return ("error")
 
@@ -117,11 +117,11 @@ def update_team_member(team_member_id):
         data.active_status = active_status
         db.session.commit()
         return {"message": "success"}
-    elif fun(query1, query2, query3) is "error1":
+    elif fun(query1, query2, query3) == "error1":
         return "team id doesn't exist"
-    elif fun(query1, query2, query3) is "error2":
+    elif fun(query1, query2, query3) == "error2":
         return "role id doesn't exist"
-    elif fun(query1, query2, query3) is "error3":
+    elif fun(query1, query2, query3) == "error3":
         return "employee id doesn't exist"
     else:
         return ("error")

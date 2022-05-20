@@ -106,9 +106,9 @@ def update_project_manager(project_manager_id):
         data.user_account_id = user_account_id
         db.session.commit()
         return {"message": "success"}
-    elif fun(query1, query2) is "error1":
+    elif fun(query1, query2) == "error1":
         return "project id doesn't exist"
-    elif fun(query1, query2) is "error2":
+    elif fun(query1, query2) == "error2":
         return "user_account id doesn't exist"
     else:
         return "error"
