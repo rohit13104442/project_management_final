@@ -23,7 +23,7 @@ class getProject(Resource):
 
     POST_DOC_MODEL = project_ns.model('add_project', {
         'project_name': fields.String(example="project1",
-                                      description='name of the project'),
+                                      description='pls mention project name'),
         'planned_start_date': fields.Date(example="2022-12-30",
                                           description='planned start date'),
         'planned_end_date': fields.Date(example="2022-12-30",

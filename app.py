@@ -1,7 +1,7 @@
 import time
 
 from flask_restx import Api
-from flask import Flask , request
+from flask import Flask, request
 
 from subject_area.endpoints.user_roles_endpoints import user_account_ns,employee_ns,team_ns, role_ns, team_member_ns
 from subject_area.endpoints.projects_endpoints import project_ns, project_manager_ns, client_partner_ns, on_project_ns, status_ns
@@ -9,10 +9,7 @@ from subject_area.endpoints.task_activity_endpoints import task_ns, activity_ns,
 from subject_area.progress_table import progress_table_ns
 from subject_area.anon_token import anon_token_ns
 from data.database_connect import app
-from subject_area.endpoints.validators import token_check
 
-# def before_request():
-#     token_check()
 
 
 def configure_endpoints(app):
